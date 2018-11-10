@@ -61,3 +61,10 @@ config BT_CTLR
 	default BT
 
 endif # BOARD_NRF52840_PCA10056
+
+if QSPI_FLASH_NRF
+
+config QSPI_FLASH_NRF_DEV_MX25R6435F
+	def_bool y
+
+endif # QSPI_FLASH_NRF
