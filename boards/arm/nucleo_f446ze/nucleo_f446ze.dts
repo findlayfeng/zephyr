@@ -5,7 +5,7 @@
  */
 
 /dts-v1/;
-#include <st/f4/stm32f446Xe.dtsi>
+#include <st/f4/stm32f446XX.dtsi>
 #include <st/f4/stm32f446z(c-e)tx-pinctrl.dtsi>
 #include "arduino_r3_connector.dtsi"
 

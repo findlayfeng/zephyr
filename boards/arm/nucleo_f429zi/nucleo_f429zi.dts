@@ -5,7 +5,7 @@
  */
 
 /dts-v1/;
-#include <st/f4/stm32f429Xi.dtsi>
+#include <st/f4/stm32f429XX.dtsi>
 #include <st/f4/stm32f429zitx-pinctrl.dtsi>
 #include "arduino_r3_connector.dtsi"
 

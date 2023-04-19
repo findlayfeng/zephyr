@@ -5,7 +5,7 @@
  */
 
 /dts-v1/;
-#include <st/f4/stm32f410Xb.dtsi>
+#include <st/f4/stm32f410rX.dtsi>
 #include <st/f4/stm32f410r(8-b)tx-pinctrl.dtsi>
 #include "arduino_r3_connector.dtsi"
 

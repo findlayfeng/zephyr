@@ -5,7 +5,7 @@
  */
 
 /dts-v1/;
-#include <st/f4/stm32f405Xg.dtsi>
+#include <st/f4/stm32f405XX.dtsi>
 #include <st/f4/stm32f405rgtx-pinctrl.dtsi>
 
 / {

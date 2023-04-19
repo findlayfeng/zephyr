@@ -6,7 +6,7 @@
 
 /dts-v1/;
 
-#include <st/f4/stm32f412Xg.dtsi>
+#include <st/f4/stm32f412cX.dtsi>
 #include <st/f4/stm32f412z(e-g)tx-pinctrl.dtsi>
 
 / {

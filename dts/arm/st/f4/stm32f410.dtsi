@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2020 Hans Unzner
+ * Copyright (c) 2023 Findlay Feng
  *
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -7,32 +8,14 @@
 #include <zephyr/dt-bindings/clock/stm32f410_clock.h>
 #include <st/f4/stm32f4.dtsi>
 
+/delete-node/ &sdmmc1;
+
 / {
 	chosen {
 		zephyr,entropy = &rng;
 	};
 
 	soc {
-		spi2: spi@40003800 {
-			compatible = "st,stm32-spi";
-			#address-cells = <1>;
-			#size-cells = <0>;
-			reg = <0x40003800 0x400>;
-			clocks = <&rcc STM32_CLOCK_BUS_APB1 0x00004000>;
-			interrupts = <36 5>;
-			status = "disabled";
-		};
-
-		spi5: spi@40015000 {
-			compatible = "st,stm32-spi";
-			#address-cells = <1>;
-			#size-cells = <0>;
-			reg = <0x40015000 0x400>;
-			clocks = <&rcc STM32_CLOCK_BUS_APB2 0x00100000>;
-			interrupts = <85 5>;
-			status = "disabled";
-		};
-
 		i2s1: i2s@40013000 {
 			compatible = "st,stm32-i2s";
 			#address-cells = <1>;
@@ -42,19 +25,6 @@
 			interrupts = <35 5>;
 			dmas = <&dma2 3 3 0x400 0x3
 				&dma2 2 3 0x400 0x3>;
-			dma-names = "tx", "rx";
-			status = "disabled";
-		};
-
-		i2s2: i2s@40003800 {
-			compatible = "st,stm32-i2s";
-			#address-cells = <1>;
-			#size-cells = <0>;
-			reg = <0x40003800 0x400>;
-			clocks = <&rcc STM32_CLOCK_BUS_APB1 0x00004000>;
-			interrupts = <36 5>;
-			dmas = <&dma1 4 0 0x400 0x3
-				&dma1 3 0 0x400 0x3>;
 			dma-names = "tx", "rx";
 			status = "disabled";
 		};

@@ -1,0 +1,46 @@
+/*
+ * Copyright (c) 2023 Findlay Feng
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+#include <mem.h>
+#include <st/f4/stm32f412.dtsi>
+
+/ {
+	sram0: memory@20000000 {
+		reg = <0x20000000 DT_SIZE_K(256)>;
+	};
+
+	soc {
+		flash-controller@40023c00 {
+			flash0: flash@8000000 {
+				reg = <0x08000000 DT_SIZE_M(1)>;
+			};
+		};
+
+		fmc: memory-controller@a0000000 {
+			compatible = "st,stm32-fmc";
+			reg = <0xa0000000 0x400>;
+			clocks = <&rcc STM32_CLOCK_BUS_AHB3 0x00000001>;
+			status = "disabled";
+
+			sdram: sdram {
+				compatible = "st,stm32-fmc-sdram";
+				#address-cells = <1>;
+				#size-cells = <0>;
+				status = "disabled";
+			};
+		};
+
+		quadspi: quadspi@a0001000 {
+			compatible = "st,stm32-qspi";
+			#address-cells = <0x1>;
+			#size-cells = <0x0>;
+			reg = <0xa0001000 0x400>;
+			interrupts = <92 0>;
+			clocks = <&rcc STM32_CLOCK_BUS_AHB3 0x00000002>;
+			status = "disabled";
+		};
+	};
+};

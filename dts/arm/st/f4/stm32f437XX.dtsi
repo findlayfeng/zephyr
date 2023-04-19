@@ -1,11 +1,12 @@
 /*
- * Copyright (c) 2020 Linaro Limited
+ * Copyright (c) 2019, Markus Fuchs <markus.fuchs@de.sauter-bc.com>
+ * Copyright (c) 2023 Findlay Feng
  *
  * SPDX-License-Identifier: Apache-2.0
  */
 
 #include <mem.h>
-#include <st/f4/stm32f429vX.dtsi>
+#include <st/f4/stm32f437.dtsi>
 
 / {
 	ccm0: memory@10000000 {
@@ -26,4 +27,3 @@
 		};
 	};
 };
-

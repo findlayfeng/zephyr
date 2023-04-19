@@ -5,7 +5,7 @@
  */
 
 /dts-v1/;
-#include <st/f4/stm32f407Xe.dtsi>
+#include <st/f4/stm32f407XX.dtsi>
 #include <st/f4/stm32f407v(e-g)tx-pinctrl.dtsi>
 
 / {
@@ -55,6 +55,10 @@
 		sw0 = &user_button_UP;
 		spi-flash0 = &w25q16cv;
 	};
+};
+
+&flash0 {
+	reg = <0x08000000 DT_SIZE_K(512)>;
 };
 
 &clk_lsi {

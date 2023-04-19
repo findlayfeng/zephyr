@@ -6,8 +6,11 @@
 
 /dts-v1/;
 
-#include <st/f4/stm32f427vi.dtsi>
+#include <st/f4/stm32f427XX.dtsi>
 #include <st/f4/stm32f427v(g-i)tx-pinctrl.dtsi>
+
+/delete-node/ &spi5;
+/delete-node/ &spi6;
 
 / {
 	model = "96Boards Gumstix AeroCore 2";

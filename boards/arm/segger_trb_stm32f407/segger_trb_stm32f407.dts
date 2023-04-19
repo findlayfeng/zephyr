@@ -5,7 +5,7 @@
  */
 
 /dts-v1/;
-#include <st/f4/stm32f407Xe.dtsi>
+#include <st/f4/stm32f407XX.dtsi>
 
 / {
 	model = "SEGGER STM32F407 Trace Reference Board";
@@ -39,6 +39,10 @@
 			label = "LED2";
 		};
 	};
+};
+
+&flash0 {
+	reg = <0x08000000 DT_SIZE_K(512)>;
 };
 
 &clk_lsi {
