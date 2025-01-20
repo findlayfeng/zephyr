@@ -1,0 +1,5 @@
+board:
+  name: stm32f103ze_mini
+  vendor: vcc-gnd
+  socs:
+    - name: stm32f103xe
