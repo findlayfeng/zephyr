@@ -1,0 +1,164 @@
+/*
+ * Copyright (c) 2024 FindlayFeng
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/dts-v1/;
+#include <st/f1/stm32f103Xe.dtsi>
+#include <st/f1/stm32f103z(c-d-e)tx-pinctrl.dtsi>
+
+/ {
+	model = "stm32f103ze_mini board";
+	compatible = "stm32f103";
+
+	chosen {
+		zephyr,console = &rtt0;
+		zephyr,shell-uart = &rtt0;
+		zephyr,sram = &sram0;
+		zephyr,flash = &flash0;
+		zephyr,code-partition = &slot0_partition;
+	};
+
+	leds {
+		compatible = "gpio-leds";
+		green_led_1: led_1 {
+			gpios = <&gpioc 13 GPIO_ACTIVE_LOW>;
+			label = "User LD1";
+		};
+	};
+
+	aliases {
+		led0 = &green_led_1;
+		watchdog0 = &iwdg;
+		die-temp0 = &die_temp;
+	};
+
+	rtt0: rtt_chan0 {
+		compatible = "segger,rtt-uart";
+		status = "okay";
+	};
+
+	rtt1: rtt_chan1 {
+		compatible = "segger,rtt-uart";
+		status = "okay";
+	};
+};
+
+&clk_lsi {
+	status = "okay";
+};
+
+&clk_hse {
+	clock-frequency = <DT_FREQ_M(8)>;
+	status = "okay";
+};
+
+&pll {
+	mul = <9>;
+	clocks = <&clk_hse>;
+	status = "okay";
+};
+
+&rcc {
+	clocks = <&pll>;
+	clock-frequency = <DT_FREQ_M(72)>;
+	ahb-prescaler = <1>;
+	apb1-prescaler = <2>;
+	apb2-prescaler = <1>;
+	/* usbpre not set: USB clock = 72 / 1.5: 48MHz */
+};
+
+&pinctrl {
+	swj-cfg = "jtag-disable";
+};
+
+&i2c1 {
+	pinctrl-0 = <&i2c1_scl_remap1_pb8 &i2c1_sda_remap1_pb9>;
+	pinctrl-names = "default";
+	status = "okay";
+	clock-frequency = <I2C_BITRATE_FAST>;
+};
+
+&spi1 {
+	pinctrl-0 = <&spi1_nss_remap1_master_pa15 &spi1_sck_remap1_master_pb3
+		     &spi1_miso_remap1_master_pb4 &spi1_mosi_remap1_master_pb5>;
+	pinctrl-names = "default";
+	status = "okay";
+
+	nor_flash: w25x40@0 {
+		compatible ="jedec,spi-nor";
+		size = <DT_SIZE_K(512)>;
+		reg = <0>;
+		spi-max-frequency = <DT_FREQ_M(104)>;
+		status = "okay";
+		jedec-id = [ef 30 13];
+	};
+};
+
+&iwdg {
+	status = "okay";
+};
+
+&timers1 {
+	st,prescaler = <10000>;
+	status = "okay";
+
+	pwm1: pwm {
+		status = "okay";
+		pinctrl-0 = <&tim1_ch1_pwm_out_pa8>;
+		pinctrl-names = "default";
+	};
+};
+
+zephyr_udc0: &usb {
+	pinctrl-0 = <&usb_dm_pa11 &usb_dp_pa12>;
+	pinctrl-names = "default";
+	status = "okay";
+};
+
+&rtc {
+	clocks = <&rcc STM32_CLOCK_BUS_APB1 0x10000000>,
+		 <&rcc STM32_SRC_LSI RTC_SEL(2)>;
+	status = "okay";
+};
+
+&die_temp {
+	status = "okay";
+};
+
+&flash0 {
+
+	partitions {
+		compatible = "fixed-partitions";
+		#address-cells = <1>;
+		#size-cells = <1>;
+
+		boot_partition: partition@0 {
+			label = "mcuboot";
+			reg = <0x00000000 0x0000C000>;
+		};
+		slot0_partition: partition@c000 {
+			label = "image-0";
+			reg = <0x0000C000 0x00036000>;
+		};
+		slot1_partition: partition@42000 {
+			label = "image-1";
+			reg = <0x00042000 0x00036000>;
+		};
+
+		/*
+		 * The flash starting at 0x000f8000 and ending at
+		 * 0x000fffff is reserved for use by the application.
+		 */
+
+		/*
+		 * Storage partition will be used by FCB/LittleFS/NVS
+		 * if enabled.
+		 */
+		storage_partition: partition@78000 {
+			label = "storage";
+			reg = <0x00078000 0x00008000>;
+		};
+	};
+};
