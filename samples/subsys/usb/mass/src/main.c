@@ -18,6 +18,7 @@ LOG_MODULE_REGISTER(main, LOG_LEVEL_INF);
 
 #if CONFIG_DISK_DRIVER_FLASH
 #include <zephyr/storage/flash_map.h>
+#include <zephyr/storage/disk_access.h>
 #endif
 
 #if CONFIG_FAT_FILESYSTEM_ELM
@@ -129,6 +130,14 @@ static void setup_disk(void)
 	if (!IS_ENABLED(CONFIG_FILE_SYSTEM_LITTLEFS) &&
 	    !IS_ENABLED(CONFIG_FAT_FILESYSTEM_ELM)) {
 		LOG_INF("No file system selected");
+
+		if (IS_ENABLED(CONFIG_DISK_DRIVER_FLASH)) {
+			rc = disk_access_ioctl("NAND", DISK_IOCTL_CTRL_INIT, NULL);
+			if (rc < 0) {
+				LOG_ERR("Failed to init disk");
+			}
+		}
+
 		return;
 	}
 
