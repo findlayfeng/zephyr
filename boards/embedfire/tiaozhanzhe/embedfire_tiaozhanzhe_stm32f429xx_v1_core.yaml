@@ -1,0 +1,19 @@
+identifier: embedfire_tiaozhanzhe
+name: Embedfire Tiao Zhan Zhe Board
+type: mcu
+arch: arm
+toolchain:
+  - zephyr
+  - gnuarmemb
+  - xtools
+ram: 64
+flash: 512
+supported:
+  - gpio
+  - i2c
+  - spi
+  - pwm
+  - watchdog
+  - adc
+  - counter
+vendor: embedfire

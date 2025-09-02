@@ -1,0 +1,118 @@
+/*
+* Copyright (c) 2024 FindlayFeng
+*
+* SPDX-License-Identifier: Apache-2.0
+*/
+
+/dts-v1/;
+#include <st/f4/stm32f429Xg.dtsi>
+#include <st/f4/stm32f429i(e-g)tx-pinctrl.dtsi>
+
+/ {
+	model = "embedfire tiao zhan zhe board";
+	compatible = "embedfire,tiaozhanzhe";
+
+	chosen {
+		zephyr,console = &rtt0;
+		zephyr,shell-uart = &rtt0;
+		zephyr,sram = &sram0;
+		zephyr,flash = &flash0;
+		zephyr,ccm = &ccm0;
+		zephyr,code-partition = &slot0_partition;
+	};
+
+	rtt0: rtt_chan0 {
+		compatible = "segger,rtt-uart";
+		status = "okay";
+	};
+};
+
+&clk_lsi {
+	status = "okay";
+};
+
+&clk_hse {
+	clock-frequency = <DT_FREQ_M(25)>;
+	status = "okay";
+};
+
+&pll {
+	div-m = <25>;
+	mul-n = <336>;
+	div-p = <2>;
+	div-q = <7>;
+	clocks = <&clk_hse>;
+	status = "okay";
+};
+
+&rcc {
+	clocks = <&pll>;
+	clock-frequency = <DT_FREQ_M(168)>;
+	ahb-prescaler = <1>;
+	apb1-prescaler = <4>;
+	apb2-prescaler = <2>;
+};
+
+&spi5 {
+	pinctrl-0 = <&spi5_nss_pf6 &spi5_sck_pf7
+	&spi5_mosi_pf9 &spi5_miso_pf8>;
+	pinctrl-names = "default";
+	status = "okay";
+
+	nor_flash: w25x128@0 {
+		compatible ="jedec,spi-nor";
+		size = <DT_SIZE_M(128)>;
+		reg = <0>;
+		spi-max-frequency = <DT_FREQ_M(21)>;
+		status = "okay";
+		jedec-id = [ef 40 18];
+		has-dpd;
+		t-enter-dpd = <3500>;
+		t-exit-dpd = <3500>;
+
+		partitions {
+			compatible = "fixed-partitions";
+			#address-cells = <1>;
+			#size-cells = <1>;
+
+			storage_partition: partition@0 {
+				label = "storage";
+				reg = <0 DT_SIZE_M(16)>;
+			};
+		};
+	};
+};
+
+zephyr_udc0: &usbotg_hs {
+	pinctrl-0 = <&usb_otg_hs_dm_pb14 &usb_otg_hs_dp_pb15>;
+	pinctrl-names = "default";
+	status = "okay";
+};
+
+&flash0 {
+	partitions {
+		compatible = "fixed-partitions";
+		#address-cells = <1>;
+		#size-cells = <1>;
+
+		/* 32KB for bootloader */
+		boot_partition: partition@0 {
+			label = "mcuboot";
+			reg = <0x00000000 DT_SIZE_K(64)>;
+			read-only;
+		};
+
+		/* application image slot: 256KB */
+		slot0_partition: partition@20000 {
+			label = "image-0";
+			reg = <0x00020000 DT_SIZE_K(256)>;
+		};
+
+		/* backup slot: 256KB */
+		slot1_partition: partition@60000 {
+			label = "image-1";
+			reg = <0x00060000 DT_SIZE_K(256)>;
+		};
+
+	};
+};

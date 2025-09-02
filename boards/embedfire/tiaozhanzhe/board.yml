@@ -1,0 +1,10 @@
+board:
+  name: embedfire_tiaozhanzhe
+  vendor: embedfire
+  revision:
+    format: custom
+    default: "v1_core"
+    revisions:
+      - name: "v1_core"
+  socs:
+    - name: stm32f429xx
